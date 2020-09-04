@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @package App\Model
  *
  * @property string plucky
- * @property string percent
+ * @property string price
  */
 class LotList extends Model
 {
@@ -20,6 +20,6 @@ class LotList extends Model
    */
   protected $fillable = [
     'plucky',
-    'percent',
+    'price',
   ];
 }

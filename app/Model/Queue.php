@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer send_to
  * @property integer type
  * @property string value
+ * @property boolean status
  */
 class Queue extends Model
 {
@@ -25,5 +26,6 @@ class Queue extends Model
     'send_to',
     'type',
     'value',
+    'status'
   ];
 }

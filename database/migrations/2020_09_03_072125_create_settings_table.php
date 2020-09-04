@@ -16,10 +16,12 @@ class CreateSettingsTable extends Migration
     Schema::create('settings', function (Blueprint $table) {
       $table->id();
       $table->integer('version');
-      $table->integer('maintenance');
+      $table->boolean('maintenance')->default(false);
       $table->double('fee');
       $table->integer('target_lot');
       $table->string('wallet_it');
+      $table->string('key_doge');
+      $table->string('dollar')->default(0);
       $table->timestamps();
     });
   }

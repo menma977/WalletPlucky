@@ -19,6 +19,7 @@ class CreateQueuesTable extends Migration
       $table->integer('send_to');
       $table->integer('type');
       $table->string('value');
+      $table->boolean('status')->default(false);
       $table->timestamps();
     });
   }

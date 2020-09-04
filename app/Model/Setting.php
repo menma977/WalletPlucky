@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property double fee
  * @property integer target_lot
  * @property string wallet_it
+ * @property string key_doge
+ * @property string dollar
  */
 class Setting extends Model
 {
@@ -27,5 +29,6 @@ class Setting extends Model
     'fee',
     'target_lot',
     'wallet_it',
+    'key_doge',
   ];
 }
