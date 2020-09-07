@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +18,27 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
 
 Route::post('login', 'Api\LoginController@index');
 Route::middleware('auth:api')->group(function () {
+  Route::post('logout', 'Api\LogoutController@index');
+
+  Route::group(['prefix' => 'user', 'as' => 'user.'], static function () {
+    Route::get('/', 'Api\UserController@index')->name('index');
+  });
+
   Route::group(['prefix' => 'lot', 'as' => 'lot.'], static function () {
+    Route::get('/', 'Api\LotController@index')->name('index');
     Route::get('/create', 'Api\LotController@create')->name('create');
+    Route::post('/store', 'Api\LotController@store')->name('store');
+  });
+
+  Route::group(['prefix' => 'doge', 'as' => 'doge.'], static function () {
+    Route::post('/', 'Api\DogeController@store')->name('store');
+  });
+
+  Route::group(['prefix' => 'queue', 'as' => 'queue.'], static function () {
+    Route::get('/', 'Api\QueueController@index')->name('index');
+  });
+
+  Route::group(['prefix' => 'setting', 'as' => 'setting.'], static function () {
+    Route::get('/', 'Api\SettingController@index')->name('index');
   });
 });

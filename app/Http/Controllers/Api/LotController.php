@@ -22,6 +22,19 @@ class LotController extends Controller
   /**
    * @return JsonResponse
    */
+  public function index()
+  {
+    $lot = Lot::where('user_id', Auth::user()->id)->get();
+    $data = [
+      'lot' => $lot,
+    ];
+
+    return response()->json($data, 200);
+  }
+
+  /**
+   * @return JsonResponse
+   */
   public function create()
   {
     $response = Http::asForm()->withHeaders([
@@ -55,11 +68,8 @@ class LotController extends Controller
             break;
           }
 
-          //to do active user
-          //$getDataUser = User::where('username', $item->username)->first();
+          $getDataUser = User::where('username', $item->username)->first();
 
-          //simulate
-          $getDataUser = User::where('username', Auth::user()->username)->first();
           $totalLot = Lot::where('user_id', $getDataUser->id)->sum('debit') - Lot::where('user_id', $getDataUser->id)->sum('credit');
           if ($totalLot >= 0 && $getDataUser->lot >= 0 && $getDataUser->lot >= $nextLot->id) {
             //for USER
@@ -153,57 +163,70 @@ class LotController extends Controller
           $nextLot = LotList::find(Auth::user()->lot >= LotList::orderBy('id', 'desc')->get()->first()->id ? LotList::orderBy('id', 'desc')->get()->first()->id : Auth::user()->lot + 1);
           $totalValue = $nextLot->price;
           $level = Level::all();
-          $dataQueue = array();
           $levelIndex = 1;
           $binary = $response->json();
 
-          //for IT
-          $queue = new Queue();
-          $queue->user_id = Auth::user()->id;
-          $queue->send_to = $it->id;
-          $queue->value = $nextLot->price * $it->fee / 100;
-          $queue->type = 0;
-          $queue->save();
-          $totalValue -= $queue->value;
+          $responseCutPlucky = Http::asForm()->withHeaders([
+            'X-Requested-With' => 'XMLHttpRequest',
+            'Content-Type' => 'application/json'
+          ])->post('https://pluckywin.com/api/trade/api.php', [
+            'a' => 'PotongPlucky',
+            'username' => Auth::user()->username,
+            'plucky' => $nextLot->plucky,
+            'ref' => md5(Auth::user()->username . "b0d0nk111179"),
+          ]);
 
-          foreach ($binary['list'] as $id => $item) {
-            if ($levelIndex > 7) {
-              break;
+          if ($responseCutPlucky->successful() && $responseCutPlucky->json()['code'] === 200) {
+            //for IT
+            $queue = new Queue();
+            $queue->user_id = Auth::user()->id;
+            $queue->send_to = $it->id;
+            $queue->value = $nextLot->price * $it->fee / 100;
+            $queue->type = 0;
+            $queue->save();
+            $totalValue -= $queue->value;
+
+            foreach ($binary['list'] as $id => $item) {
+              $getDataUser = User::where('username', $item->username)->first();
+
+              if ($levelIndex > 7 || $getDataUser->role === 1) {
+                break;
+              }
+
+              $totalLot = Lot::where('user_id', $getDataUser->id)->sum('debit') - Lot::where('user_id', $getDataUser->id)->sum('credit');
+              if ($totalLot >= 0 && $getDataUser->lot >= 0 && $getDataUser->lot >= $nextLot->id) {
+                //for USER
+                $queue = new Queue();
+                $queue->user_id = Auth::user()->id;
+                $queue->send_to = $getDataUser->id;
+                $queue->value = $nextLot->price * $level->find($levelIndex)->percent / 100;
+                $queue->type = 1;
+                $queue->save();
+                $totalValue -= $queue->value;
+                $levelIndex++;
+              }
             }
 
-            //to do active user
-            //$getDataUser = User::where('username', $item->username)->first();
+            //for SPONSOR
+            $queue = new Queue();
+            $queue->user_id = Auth::user()->id;
+            $queue->send_to = $randomAdminWallet->id;
+            $queue->value = $totalValue;
+            $queue->type = 2;
+            $queue->save();
 
-            //simulate
-            $getDataUser = User::where('username', Auth::user()->username)->first();
-            $totalLot = Lot::where('user_id', $getDataUser->id)->sum('debit') - Lot::where('user_id', $getDataUser->id)->sum('credit');
-            if ($totalLot >= 0 && $getDataUser->lot >= 0 && $getDataUser->lot >= $nextLot->id) {
-              //for USER
-              $queue = new Queue();
-              $queue->user_id = Auth::user()->id;
-              $queue->send_to = $getDataUser->id;
-              $queue->value = $nextLot->price * $level->find($levelIndex)->percent / 100;
-              $queue->type = 1;
-              $queue->save();
-              $totalValue -= $queue->value;
-              $levelIndex++;
-            }
+            $data = [
+              'message' => 'LOT in process',
+            ];
+
+            return response()->json($data, 200);
+          } else {
+            $data = [
+              'message' => 'Target Process Time Out',
+            ];
+
+            return response()->json($data, 500);
           }
-
-          //for SPONSOR
-          $queue = new Queue();
-          $queue->user_id = Auth::user()->id;
-          $queue->send_to = $randomAdminWallet->id;
-          $queue->value = $totalValue;
-          $queue->type = 2;
-          $queue->save();
-
-          $data = [
-            'nextLot' => $nextLot,
-            'data' => $dataQueue,
-          ];
-
-          return response()->json($data, 200);
         }
       } else {
         $data = [
