@@ -1,10 +1,7 @@
-<aside class="main-sidebar sidebar-light-teal elevation-4">
+<aside class="main-sidebar sidebar-light-primary elevation-4">
   <!-- Brand Logo -->
   <a href="#" class="brand-link navbar-primary">
-    <img src="{{ asset('dist/img/ic_logo_and_title_foreground.png') }}"
-         alt="AdminLTE Logo"
-         class="brand-image img-circle elevation-1"
-         style="opacity: .8">
+    <img src="{{ asset('dist/img/ic_logo_and_title_foreground.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-1" style="opacity: .8">
     <div class="brand-text font-weight-light">
       <strong>Plucky</strong>
     </div>
@@ -16,7 +13,7 @@
         <img src="{{ asset('dist/img/avatar5.png') }}" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="{{ route('user.show', Auth::user()->id) }}" class="d-block text-wrap">{{ \Illuminate\Support\Facades\Auth::user()->email }}</a>
+        <a href="#" class="d-block text-wrap">{{ \Illuminate\Support\Facades\Auth::user()->username }}</a>
       </div>
     </div>
 
