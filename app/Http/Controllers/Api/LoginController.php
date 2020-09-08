@@ -31,7 +31,7 @@ class LoginController extends Controller
         }
         $user = Auth::user();
         if ($user) {
-          if ($user->suspand) {
+          if ($user->suspend) {
             $data = [
               'message' => 'Your account has been suspended.',
             ];
@@ -57,8 +57,10 @@ class LoginController extends Controller
               'token' => $user->token,
               'wallet' => $user->wallet,
               'phone' => $user->phone,
-              'username' => $user->doge_username,
-              'password' => $user->doge_password
+              'username' => $user->username,
+              'password' => $user->password_junk,
+              'usernameDoge' => $user->doge_username,
+              'passwordDoge' => $user->doge_password
             ], 200);
           }
         } else {
@@ -88,7 +90,7 @@ class LoginController extends Controller
   public function show()
   {
     $data = [
-      'version' => Setting::find(1)->app_version,
+      'version' => Setting::find(1)->version,
     ];
 
     return response()->json($data, 200);

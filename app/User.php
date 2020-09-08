@@ -63,6 +63,8 @@ class User extends Authenticatable
     'password_junk',
     'secondary_password',
     'secondary_password_junk',
+    'doge_username',
+    'doge_password',
     'remember_token',
   ];
 

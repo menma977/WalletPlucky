@@ -17,11 +17,13 @@ header('Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Conte
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
 
 Route::post('login', 'Api\LoginController@index');
+Route::get('login/show', 'Api\LoginController@show');
 Route::middleware('auth:api')->group(function () {
-  Route::post('logout', 'Api\LogoutController@index');
+  Route::get('logout', 'Api\LogoutController@index');
 
   Route::group(['prefix' => 'user', 'as' => 'user.'], static function () {
     Route::get('/', 'Api\UserController@index')->name('index');
+    Route::post('/store', 'Api\UserController@store')->name('store');
   });
 
   Route::group(['prefix' => 'lot', 'as' => 'lot.'], static function () {

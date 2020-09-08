@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Model\Lot;
-use App\Model\LotList;
 use App\Model\Queue;
 use App\Model\Setting;
+use App\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -20,7 +23,6 @@ class UserController extends Controller
     $user = Auth::user();
     if ($user) {
       $setting = Setting::find(1);
-      $lot = $user->lot > 0 ? LotList::find($user->lot) : null;
       $onQueue = Queue::where('user_id', Auth::user()->id)->where('status', false)->count() ? true : false;
       $dollar = $setting->dollar;
       $lotTarget = Lot::where('user_id', $user->id)->sum('debit');
@@ -28,7 +30,6 @@ class UserController extends Controller
 
       $data = [
         'user' => $user,
-        'lot' => $lot,
         'onQueue' => $onQueue,
         'dollar' => $dollar,
         'lotTarget' => $lotTarget,
@@ -41,5 +42,59 @@ class UserController extends Controller
       ];
       return response()->json($data, 500);
     }
+  }
+
+  /**
+   * @param Request $request
+   * @return JsonResponse
+   * @throws ValidationException
+   */
+  public function store(Request $request)
+  {
+    $this->validate($request, [
+      'username' => 'required|string',
+      'phone' => 'required|string',
+      'email' => 'required|string',
+      'password_junk' => 'required|string',
+      'secondary_password_junk' => 'required|string',
+      'doge_username' => 'required|string',
+      'doge_password' => 'required|string',
+      'wallet' => 'required|string',
+    ]);
+    if (User::where('username', $request->username)) {
+      $data = User::where('username', $request->username)->first();
+      $data->phone = $request->phone;
+      $data->email = $request->email;
+      $data->password = Hash::make($request->password_junk);
+      $data->password_junk = $request->password_junk;
+      $data->secondary_password = Hash::make($request->secondary_password_junk);
+      $data->secondary_password_junk = $request->secondary_password_junk;
+      $data->doge_username = $request->doge_username;
+      $data->doge_password = $request->doge_password;
+      $data->wallet = $request->wallet;
+      $data->is_password_ready = true;
+      $data->is_secondary_password_ready = true;
+      $data->save();
+    } else {
+      $data = new User();
+      $data->username = $request->username;
+      $data->phone = $request->phone;
+      $data->email = $request->email;
+      $data->password = Hash::make($request->password_junk);
+      $data->password_junk = $request->password_junk;
+      $data->secondary_password = Hash::make($request->secondary_password_junk);
+      $data->secondary_password_junk = $request->secondary_password_junk;
+      $data->doge_username = $request->doge_username;
+      $data->doge_password = $request->doge_password;
+      $data->wallet = $request->wallet;
+      $data->is_password_ready = true;
+      $data->is_secondary_password_ready = true;
+      $data->save();
+    }
+
+    $data = [
+      'message' => 'Done.',
+    ];
+    return response()->json($data, 200);
   }
 }
