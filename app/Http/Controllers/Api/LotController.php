@@ -10,6 +10,7 @@ use App\Model\Queue;
 use App\Model\Setting;
 use App\Model\WalletAdmin;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,23 @@ class LotController extends Controller
   public function index()
   {
     $lot = Lot::where('user_id', Auth::user()->id)->get();
+    $lot->map(function ($item) {
+      if ($item->user_id == 0) {
+        $item->email = "Network Fee";
+      } else if ($item->type == 2) {
+        $item->wallet = WalletAdmin::find($item->user_id)->wallet;
+      } else {
+        $item->wallet = User::find($item->user_id)->wallet;
+      }
+
+      if ($item->target == 0) {
+        $item->walletTarget = "Network Fee";
+      } else {
+        $item->walletTarget = User::find($item->target)->wallet;
+      }
+
+      $item->date = Carbon::parse($item->created_at)->format('d-M-Y H:i:s');
+    });
     $data = [
       'lot' => $lot,
     ];
@@ -63,25 +81,28 @@ class LotController extends Controller
         $levelIndex = 1;
         $binary = $response->json();
 
-        foreach ($binary['list'] as $id => $item) {
+        foreach ($binary['list'] as $item) {
           if ($levelIndex > 7) {
             break;
           }
 
-          $getDataUser = User::where('username', $item->username)->first();
-
-          $totalLot = Lot::where('user_id', $getDataUser->id)->sum('debit') - Lot::where('user_id', $getDataUser->id)->sum('credit');
-          if ($totalLot >= 0 && $getDataUser->lot >= 0 && $getDataUser->lot >= $nextLot->id) {
-            //for USER
-            $totalValue -= $nextLot->price * $level->find($levelIndex)->percent / 100;
-            $dataList = [
-              'user' => $getDataUser->wallet,
-              'id' => $getDataUser->id,
-              'value' => $nextLot->price * $level->find($levelIndex)->percent / 100,
-              'type' => 1
-            ];
-            array_push($dataQueue, $dataList);
-            $levelIndex++;
+          $getDataUser = User::where('username', $item['username'])->first();
+          if ($getDataUser) {
+            $totalLot = Lot::where('user_id', $getDataUser->id)->sum('debit') - Lot::where('user_id', $getDataUser->id)->sum('credit');
+            if ($totalLot > 0 && $getDataUser->lot > 0 && $getDataUser->lot >= $nextLot->id) {
+              //for USER
+              $totalValue -= $nextLot->price * $level->find($levelIndex)->percent / 100;
+              $dataList = [
+                'user' => $getDataUser->wallet,
+                'id' => $getDataUser->id,
+                'value' => $nextLot->price * $level->find($levelIndex)->percent / 100,
+                'type' => 1
+              ];
+              array_push($dataQueue, $dataList);
+              $levelIndex++;
+            }
+          } else {
+            break;
           }
         }
 
@@ -107,7 +128,7 @@ class LotController extends Controller
 
         $data = [
           'nextLot' => $nextLot,
-          'data' => $dataQueue,
+          'dataQueue' => $dataQueue,
         ];
 
         return response()->json($data, 200);
@@ -129,7 +150,7 @@ class LotController extends Controller
   public function store(Request $request)
   {
     $this->validate($request, [
-      'grade' => 'required|numeric|exists:lot_lists,id',
+      'lot' => 'required|numeric|exists:lot_lists,id',
       'balance' => 'required|numeric',
       'secondary_password' => 'required|numeric'
     ]);
@@ -175,7 +196,6 @@ class LotController extends Controller
             'plucky' => $nextLot->plucky,
             'ref' => md5(Auth::user()->username . "b0d0nk111179"),
           ]);
-
           if ($responseCutPlucky->successful() && $responseCutPlucky->json()['code'] === 200) {
             //for IT
             $queue = new Queue();
@@ -187,14 +207,14 @@ class LotController extends Controller
             $totalValue -= $queue->value;
 
             foreach ($binary['list'] as $id => $item) {
-              $getDataUser = User::where('username', $item->username)->first();
+              $getDataUser = User::where('username', $item['username'])->first();
 
               if ($levelIndex > 7 || $getDataUser->role === 1) {
                 break;
               }
 
               $totalLot = Lot::where('user_id', $getDataUser->id)->sum('debit') - Lot::where('user_id', $getDataUser->id)->sum('credit');
-              if ($totalLot >= 0 && $getDataUser->lot >= 0 && $getDataUser->lot >= $nextLot->id) {
+              if ($totalLot > 0 && $getDataUser->lot > 0 && $getDataUser->lot >= $nextLot->id) {
                 //for USER
                 $queue = new Queue();
                 $queue->user_id = Auth::user()->id;
@@ -214,6 +234,19 @@ class LotController extends Controller
             $queue->value = $totalValue;
             $queue->type = 2;
             $queue->save();
+
+            $lot = new Lot();
+            $lot->user_id = Auth::user()->id;
+            $lot->from_user = Auth::user()->id;
+            $lot->debit = $nextLot->price * 5;
+            $lot->credit = 0;
+            $lot->lot = Auth::user()->lot + 1;
+            $lot->type = 1;
+            $lot->save();
+
+            $user = User::find(Auth::user()->id);
+            $user->lot++;
+            $user->save();
 
             $data = [
               'message' => 'LOT in process',

@@ -61,7 +61,7 @@ class UserController extends Controller
       'doge_password' => 'required|string',
       'wallet' => 'required|string',
     ]);
-    if (User::where('username', $request->username)) {
+    if (User::where('username', $request->username)->count()) {
       $data = User::where('username', $request->username)->first();
       $data->phone = $request->phone;
       $data->email = $request->email;
