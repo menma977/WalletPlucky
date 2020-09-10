@@ -7,6 +7,7 @@ use App\Model\Lot;
 use App\Model\Queue;
 use App\Model\Setting;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,12 +29,19 @@ class UserController extends Controller
       $lotTarget = Lot::where('user_id', $user->id)->sum('debit');
       $lotProgress = Lot::where('user_id', $user->id)->sum('credit');
 
+      if ($user->date_trade) {
+        $isWin = Carbon::now()->format('d') == Carbon::parse($user->date_trade)->format('d');
+      } else {
+        $isWin = false;
+      }
+
       $data = [
         'user' => $user,
         'onQueue' => $onQueue,
         'dollar' => $dollar,
         'lotTarget' => $lotTarget,
         'lotProgress' => $lotProgress,
+        'isWin' => $isWin
       ];
       return response()->json($data, 200);
     } else {

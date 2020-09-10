@@ -31,6 +31,7 @@ class CreateUsersTable extends Migration
       $table->boolean('suspend')->default(false);
       $table->boolean('is_password_ready')->default(false);
       $table->boolean('is_secondary_password_ready')->default(false);
+      $table->string('date_trade')->nullable();
       $table->rememberToken();
       $table->timestamps();
     });

@@ -34,6 +34,7 @@ Route::middleware('auth:api')->group(function () {
 
   Route::group(['prefix' => 'doge', 'as' => 'doge.'], static function () {
     Route::post('/store', 'Api\DogeController@store')->name('store');
+    Route::get('/update', 'Api\DogeController@update')->name('update');
   });
 
   Route::group(['prefix' => 'queue', 'as' => 'queue.'], static function () {

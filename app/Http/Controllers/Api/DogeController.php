@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -70,5 +72,17 @@ class DogeController extends Controller
       ];
       return response()->json($data, 500);
     }
+  }
+
+  /**
+   * @return JsonResponse
+   */
+  public function update()
+  {
+    $user = User::find(Auth::user()->id);
+    $user->date_trade = Carbon::now();
+    $user->save();
+
+    return response()->json(['message' => 'success'], 200);
   }
 }

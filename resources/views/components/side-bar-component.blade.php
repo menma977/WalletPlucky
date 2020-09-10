@@ -1,6 +1,6 @@
-<aside class="main-sidebar sidebar-light-primary elevation-4">
+<aside class="main-sidebar sidebar-light-teal elevation-4">
   <!-- Brand Logo -->
-  <a href="#" class="brand-link navbar-primary">
+  <a href="#" class="brand-link navbar-teal">
     <img src="{{ asset('dist/img/ic_logo_and_title_foreground.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-1" style="opacity: .8">
     <div class="brand-text font-weight-light">
       <strong>Plucky</strong>
@@ -24,6 +24,38 @@
             <i class="nav-icon fas fa-heartbeat"></i>
             <p>
               Home
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('user.index') }}" class="nav-link {{ request()->is(['user', 'user/*']) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-users"></i>
+            <p>
+              User
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('lot.index') }}" class="nav-link {{ request()->is(['lot', 'lot/*']) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-trophy"></i>
+            <p>
+              LOT
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('level.index') }}" class="nav-link {{ request()->is(['level', 'level/*']) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-stream"></i>
+            <p>
+              Level
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('setting.index') }}" class="nav-link {{ request()->is(['setting', 'setting/*']) ? 'active' : '' }}">
+            <i class="nav-icon fa fa-cogs"></i>
+            <p>
+              Setting
             </p>
           </a>
         </li>

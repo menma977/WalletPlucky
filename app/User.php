@@ -25,6 +25,7 @@ use Laravel\Passport\HasApiTokens;
  * @property boolean suspend
  * @property boolean is_password_ready
  * @property boolean is_secondary_password_ready
+ * @property string date_trade
  */
 class User extends Authenticatable
 {
@@ -50,7 +51,8 @@ class User extends Authenticatable
     'lot',
     'suspend',
     'is_password_ready',
-    'is_secondary_password_ready'
+    'is_secondary_password_ready',
+    'date_trade'
   ];
 
   /**

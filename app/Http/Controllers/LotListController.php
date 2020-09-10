@@ -3,83 +3,119 @@
 namespace App\Http\Controllers;
 
 use App\Model\LotList;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 class LotListController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+  /**
+   * Display a listing of the resource.
+   *
+   * @return Application|Factory|View|void
+   */
+  public function index()
+  {
+    $grade = LotList::all();
+
+    $data = [
+      'grade' => $grade
+    ];
+
+    return view('lot.index', $data);
+  }
+
+  /**
+   * Store a newly created resource in storage.
+   *
+   * @param Request $request
+   * @return RedirectResponse
+   * @throws ValidationException
+   */
+  public function store(Request $request)
+  {
+    $this->validate($request, [
+      'price' => 'required|numeric',
+      'plucky' => 'required|numeric',
+    ]);
+
+    $grade = new LotList();
+    if (strpos($request->price, ".") !== false || strpos($request->price, ",") !== false) {
+      $rawBalance = str_replace(array(".", ","), "", $request->price);
+      $rawBalance /= 100000000;
+      $balance = number_format($rawBalance * 100000000, 0, '.', '');
+    } else {
+      $rawBalance = $request->price / 100000000;
+      $balance = number_format($rawBalance * 100000000, 0, '.', '');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    if (strpos($request->plucky, ".") !== false || strpos($request->plucky, ",") !== false) {
+      $rawBalance = str_replace(array(".", ","), "", $request->plucky);
+      $rawBalance /= 10000;
+      $balancePlucky = number_format($rawBalance * 100000000, 0, '.', '');
+    } else {
+      $rawBalance = $request->plucky / 10000;
+      $balancePlucky = number_format($rawBalance * 100000000, 0, '.', '');
+    }
+    $grade->price = $balance;
+    $grade->plucky = $balancePlucky;
+    $grade->save();
+
+    return redirect()->back();
+  }
+
+  /**
+   * Update the specified resource in storage.
+   *
+   * @param Request $request
+   * @param $id
+   * @return RedirectResponse
+   * @throws ValidationException
+   */
+  public function update(Request $request, $id)
+  {
+    $this->validate($request, [
+      'price' => 'required|numeric',
+      'plucky' => 'required|numeric',
+    ]);
+
+    $grade = LotList::find($id);
+    if (strpos($request->price, ".") !== false || strpos($request->price, ",") !== false) {
+      $rawBalance = str_replace(array(".", ","), "", $request->price);
+      $rawBalance /= 100000000;
+      $balance = number_format($rawBalance * 100000000, 0, '.', '');
+    } else {
+      $rawBalance = $request->price / 100000000;
+      $balance = number_format($rawBalance * 100000000, 0, '.', '');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    if (strpos($request->plucky, ".") !== false || strpos($request->plucky, ",") !== false) {
+      $rawBalance = str_replace(array(".", ","), "", $request->plucky);
+      $rawBalance /= 10000;
+      $balancePlucky = number_format($rawBalance * 100000000, 0, '.', '');
+    } else {
+      $rawBalance = $request->plucky / 10000;
+      $balancePlucky = number_format($rawBalance * 100000000, 0, '.', '');
     }
+    $grade->price = $balance;
+    $grade->plucky = $balancePlucky;
+    $grade->save();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\LotList  $lotList
-     * @return \Illuminate\Http\Response
-     */
-    public function show(LotList $lotList)
-    {
-        //
-    }
+    return redirect()->back();
+  }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\LotList  $lotList
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(LotList $lotList)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\LotList  $lotList
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, LotList $lotList)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Model\LotList  $lotList
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(LotList $lotList)
-    {
-        //
-    }
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param $id
+   * @return RedirectResponse
+   */
+  public function destroy($id)
+  {
+    LotList::destroy($id);
+    return redirect()->back();
+  }
 }
