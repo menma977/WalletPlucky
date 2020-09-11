@@ -73,7 +73,7 @@
               {{ number_format($item->price/ 100000000, 8, '.', '') }} DOGE
             </td>
             <td>
-              {{ number_format($item->plucky/ 100000000, 4, '.', '') }} Plucky
+              {{ number_format($item->plucky, 4, '.', '') }} Plucky
             </td>
             <td>
               <button type="button" class="btn btn-block btn-info btn-xs" data-toggle="modal" data-target="#modal-{{ $item->id }}">Edit</button>
@@ -104,7 +104,7 @@
                     <div class="form-group">
                       <label for="plucky">Plucky</label>
                       <input type="text" class="form-control @error('plucky') is-invalid @enderror" placeholder="Total Plucky" id="plucky" name="plucky"
-                             value="{{ old('plucky') ?: number_format($item->plucky/ 100000000, 4, '.', '') }}">
+                             value="{{ old('plucky') ?: number_format($item->plucky, 4, '.', '') }}">
                     </div>
                   </div>
                   <div class="modal-footer justify-content-between">
