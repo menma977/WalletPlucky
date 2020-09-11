@@ -51,17 +51,8 @@ class LotListController extends Controller
       $rawBalance = $request->price / 100000000;
       $balance = number_format($rawBalance * 100000000, 0, '.', '');
     }
-
-    if (strpos($request->plucky, ".") !== false || strpos($request->plucky, ",") !== false) {
-      $rawBalance = str_replace(array(".", ","), "", $request->plucky);
-      $rawBalance /= 10000;
-      $balancePlucky = number_format($rawBalance * 100000000, 0, '.', '');
-    } else {
-      $rawBalance = $request->plucky / 10000;
-      $balancePlucky = number_format($rawBalance * 100000000, 0, '.', '');
-    }
     $grade->price = $balance;
-    $grade->plucky = $balancePlucky;
+    $grade->plucky = str_replace(",", ".", $request->plucky);
     $grade->save();
 
     return redirect()->back();
@@ -91,17 +82,8 @@ class LotListController extends Controller
       $rawBalance = $request->price / 100000000;
       $balance = number_format($rawBalance * 100000000, 0, '.', '');
     }
-
-    if (strpos($request->plucky, ".") !== false || strpos($request->plucky, ",") !== false) {
-      $rawBalance = str_replace(array(".", ","), "", $request->plucky);
-      $rawBalance /= 10000;
-      $balancePlucky = number_format($rawBalance * 100000000, 0, '.', '');
-    } else {
-      $rawBalance = $request->plucky / 10000;
-      $balancePlucky = number_format($rawBalance * 100000000, 0, '.', '');
-    }
     $grade->price = $balance;
-    $grade->plucky = $balancePlucky;
+    $grade->plucky = str_replace(",", ".", $request->plucky);
     $grade->save();
 
     return redirect()->back();
