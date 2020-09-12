@@ -167,8 +167,8 @@
 
       @foreach($graphicGroup as $id => $item)
       arrayLabel.push("{{$id}}")
-      arrayData1.push("{{$item->upgrade}}")
-      arrayData2.push("{{$item->newUser}}")
+      arrayData1.push("{{$item['upgrade']}}")
+      arrayData2.push("{{$item['newUser']}}")
       @endforeach
 
       const areaChartData = {
