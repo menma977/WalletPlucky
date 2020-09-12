@@ -6,6 +6,8 @@ use App\Model\Lot;
 use App\Model\LotList;
 use App\User;
 use Carbon\Carbon;
+use DateInterval;
+use DatePeriod;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
@@ -39,17 +41,17 @@ class HomeController extends Controller
       ++$dataMargeLot[$item->lot];
     }
 
-    $graphic = Lot::whereMonth('created_at', '<=', Carbon::now())->whereMonth('created_at', '>=', Carbon::now()->addMonths(-1))->where('credit', 0)->get();
-    $graphicGroup = $graphic->groupBy(function ($item) {
-      return (string)Carbon::parse($item->created_at)->format('d');
-    })->map(function ($item) {
-      $item->upgrade = $item->count();
-      $item->newUser = 0;
-      foreach ($item as $subItem) {
-        $item->newUser = User::whereDay('created_at', $subItem->created_at)->count();
-      }
-      return $item;
-    });
+    $graphicGroup = [];
+    $date = Carbon::now()->subMonths(1);
+    $dateNow = Carbon::now();
+    $interval = DateInterval::createFromDateString('1 day');
+    $period = new DatePeriod($date, $interval, $dateNow);
+    foreach ($period as $item) {
+      $graphicGroup[Carbon::parse($item)->format('d')] = [
+        'upgrade'=> Lot::whereDate('created_at', $item)->count(),
+        'newUser'=> User::whereDate('created_at', $item)->count()
+      ];
+    }
 
     $data = [
       'graphicGroup' => $graphicGroup,
