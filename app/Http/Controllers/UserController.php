@@ -119,14 +119,12 @@ class UserController extends Controller
   public function show($id)
   {
     $user = User::find($id);
-    $grade = Auth::user()->level > 0 ? LotList::find($user->level) : null;
     $onQueue = Queue::where('user_id', $user->id)->where('status', 0)->count();
 
     $sponsorLine = $user->email;
 
     $data = [
       'user' => $user,
-      'grade' => $grade,
       'gradeTarget' => Lot::where('user_id', $id)->sum("debit"),
       'progressGrade' => Lot::where('user_id', $id)->sum("credit"),
       'onQueue' => $onQueue,
@@ -146,8 +144,10 @@ class UserController extends Controller
     $gradeHistory->map(function ($item) {
       if ($item->user_id == 0) {
         $item->email = "Network Fee";
+        $item->lot = "Network";
       } else {
         $item->email = User::find($item->user_id)->email;
+        $item->lot = User::find($item->user_id)->lot;
       }
 
       $item->date = Carbon::parse($item->created_at)->format('d-M-Y H:i:s');
@@ -166,6 +166,6 @@ class UserController extends Controller
     $user->date_trade = null;
     $user->save();
 
-    return \redirect()->back();
+    return redirect('user/show/'.$id);
   }
 }
