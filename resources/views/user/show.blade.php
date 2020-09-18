@@ -26,16 +26,16 @@
               <img class="profile-user-img img-fluid img-circle" src="{{ asset('dist/img/ic_logo_and_title_foreground.png') }}" alt="User profile picture">
             </div>
 
-            <h3 class="profile-username text-center">{{ $user->email }}</h3>
+            <h3 class="profile-username text-center">{{ $user->username }}</h3>
 
-            <p class="text-muted text-center">{{ $user->phone }}</p>
+            <p class="text-muted text-center">{{ $user->email }}</p>
 
             <ul class="list-group list-group-unbordered mb-3">
               <li class="list-group-item">
                 <b>Wallet</b> <a class="float-right">{{ $user->wallet }}</a>
               </li>
               <li class="list-group-item">
-                <b>LOT</b> <a class="float-right">LOT {{ $grade->id ?? 0 }}</a>
+                <b>LOT</b> <a class="float-right">LOT {{ $user->lot }}</a>
               </li>
               <li class="list-group-item">
                 <b>Balance</b>
@@ -431,15 +431,15 @@
         for (let i = 0; i < data.length; i++) {
           let debit = data[i].debit;
           let credit = data[i].credit;
-          let level = data[i].upgrade_level;
+          let level = data[i].lot;
 
           let description = ""
           let balance = ""
           if (debit == 0) {
-            description = data[i].email + " Send: " + credit / 100000000 + " DOGE. Upgrade Level" + level;
+            description = data[i].email + " Send: " + credit / 100000000 + " DOGE. Upgrade Lot " + level;
             balance = "-" + credit / 100000000 + " DOGE"
           } else {
-            description = data[i].email + " Send: " + debit / 100000000 + " DOGE. Upgrade Level" + level;
+            description = data[i].email + " Send: " + debit / 100000000 + " DOGE. Upgrade Lot " + level;
             balance = "+" + debit / 100000000 + " DOGE"
           }
           let date = data[i].date;
