@@ -112,8 +112,8 @@
         @else
           'Process Registration',
         @endif
-          '{{ $item->username_doge }}',
-        '{{ $item->password_doge }}',
+          '{{ $item->doge_username }}',
+        '{{ $item->doge_password }}',
         '{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y H:i:s') }}',
         '<a href="{{ route('user.logoutSession', $item->id) }}"><button type="button" class="btn btn-block btn-danger btn-xs">Delete Treding Today</button></a>',
       ],);
