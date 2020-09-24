@@ -7,6 +7,7 @@ use App\Model\Queue;
 use App\Model\Setting;
 use App\Model\WalletAdmin;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -46,7 +47,7 @@ class UpgradeAccount extends Command
   public function handle()
   {
     try {
-      $data = Queue::where('status', 0)->orderBy('id', 'asc')->get()->first();
+      $data = Queue::where('status', 0)->whereDate('created_at', '<=', Carbon::now())->orderBy('id', 'asc')->get()->first();
       if ($data) {
         $user = User::find($data->user_id);
         if ($data->type == 2) {
@@ -121,6 +122,9 @@ class UpgradeAccount extends Command
               $lot->type = 1;
               $lot->save();
             }
+          } else {
+            $data->created_at = Carbon::parse($data->created_at)->addDay()->format('Y-m-d H:i:s');
+            $data->save();
           }
         }
       }
