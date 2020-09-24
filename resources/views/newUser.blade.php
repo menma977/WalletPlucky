@@ -30,7 +30,11 @@
         @foreach($data as $item)
           <tr>
             <td>{{ $loop->index + 1 }}.</td>
-            <td>{{ $item->email }}</td>
+            <td>
+              <a href="{{ route('user.show', $item->id) }}" class="btn btn-block btn-outline-success btn-xs">
+                {{ $item->email }}
+              </a>
+            </td>
             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y H:i:s') }}</td>
           </tr>
         @endforeach
