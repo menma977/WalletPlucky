@@ -45,39 +45,15 @@ class UserController extends Controller
 
     $user = User::where('username', $request->username)->first();
     if ($user) {
-      $grade = Auth::user()->level > 0 ? LotList::find($user->level) : null;
-      $onQueue = Queue::where('user_id', $user->id)->where('status', 0)->count();
-
-      $sponsorLine = $user->email;
-
-      $data = [
-        'user' => $user,
-        'grade' => $grade,
-        'gradeTarget' => Lot::where('user_id', $user->id)->sum("debit"),
-        'progressGrade' => Lot::where('user_id', $user->id)->sum("credit"),
-        'onQueue' => $onQueue,
-        'sponsorLine' => $sponsorLine
-      ];
-
-      return view('user.show', $data);
+      return redirect()->route('user.show', $user->id);
+    }
+    $user = User::where('email', $request->username)->first();
+    if ($user) {
+      return redirect()->route('user.show', $user->id);
     }
     $user = User::where('wallet', $request->username)->first();
     if ($user) {
-      $grade = Auth::user()->level > 0 ? LotList::find($user->level) : null;
-      $onQueue = Queue::where('user_id', $user->id)->where('status', 0)->count();
-
-      $sponsorLine = $user->email;
-
-      $data = [
-        'user' => $user,
-        'grade' => $grade,
-        'gradeTarget' => Lot::where('user_id', $user->id)->sum("debit"),
-        'progressGrade' => Lot::where('user_id', $user->id)->sum("credit"),
-        'onQueue' => $onQueue,
-        'sponsorLine' => $sponsorLine
-      ];
-
-      return view('user.show', $data);
+      return redirect()->route('user.show', $user->id);
     }
 
     return redirect::back()->withErrors([
