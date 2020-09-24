@@ -22,7 +22,7 @@ class DogeController extends Controller
   public function store(Request $request)
   {
     $this->validate($request, [
-      'wallet' => 'required|string|exists:users,wallet',
+      'wallet' => 'required|string',
       'amount' => 'required|numeric',
       'sessionCookie' => 'required|string',
       'secondary_password' => 'required|numeric'

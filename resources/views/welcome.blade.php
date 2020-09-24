@@ -9,12 +9,12 @@
 
   <div class="row">
     <div class="col-md-12 mb-2">
-      <a href="{{ url('download/dogearn.apk') }}" class="btn btn-block btn-primary">
+      <a href="{{ url('https://pluckywin.com/download/app-release.apk') }}" class="btn btn-block btn-primary">
         <i class="fab fa-android mr-2"></i> Download Wallet PLUCKY
       </a>
     </div>
     <div class="col-md-12 mb-2">
-      <a href="{{ url('https://play.google.com/store/apps/details?id=net.dogearn') }}" class="btn btn-block btn-success">
+      <a href="{{ url('https://play.google.com/store/apps/details?id=com.plucky.wallet') }}" class="btn btn-block btn-success">
         <i class="fab fa-google-play mr-2"></i> Download Via Play Store
       </a>
     </div>

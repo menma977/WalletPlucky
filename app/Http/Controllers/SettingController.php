@@ -87,7 +87,7 @@ class SettingController extends Controller
     ]);
 
     $setting = Setting::find(1);
-    $setting->app_version = $request->version;
+    $setting->version = $request->version;
     $setting->save();
 
     DB::table('oauth_access_tokens')->delete();

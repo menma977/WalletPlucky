@@ -71,7 +71,7 @@ class LoginController extends Controller
         }
       } else {
         $data = [
-          'message' => 'There is an error in your account please contact the admin.',
+          'message' => 'Invalid username or password.',
         ];
         return response()->json($data, 500);
       }

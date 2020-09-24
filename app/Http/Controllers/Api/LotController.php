@@ -203,7 +203,6 @@ class LotController extends Controller
             $queue->send_to = $it->id;
             $queue->value = $nextLot->price * $it->fee / 100;
             $queue->type = 0;
-            $queue->save();
             $totalValue -= $queue->value;
 
             foreach ($binary['list'] as $id => $item) {
@@ -226,6 +225,7 @@ class LotController extends Controller
                 $levelIndex++;
               }
             }
+            $queue->save();
 
             //for SPONSOR
             $queue = new Queue();

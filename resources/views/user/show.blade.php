@@ -187,6 +187,8 @@
   <!-- DataTables -->
   <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
   <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
 @endsection
 
 @section('addJs')
@@ -196,6 +198,9 @@
   <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
   <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
 
+    <!-- Toastr -->
+  <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+  
   <script>
     let sessionCookie = ""
     let tableDepositExternal = $('#tableDepositExternal').DataTable({
@@ -270,8 +275,8 @@
       let urlencoded = new URLSearchParams();
       urlencoded.append("a", "Login");
       urlencoded.append("key", "1b4755ced78e4d91bce9128b9a053cad");
-      urlencoded.append("username", "{{ $user->username_doge }}");
-      urlencoded.append("password", "{{ $user->password_doge }}");
+      urlencoded.append("username", "{{ $user->doge_username }}");
+      urlencoded.append("password", "{{ $user->doge_password }}");
       urlencoded.append("Totp", "''");
 
       let requestOptions = {
@@ -283,6 +288,7 @@
 
       const url = "https://corsdoge.herokuapp.com/doge";
       fetch(url, requestOptions).then(response => response.json()).then(result => {
+          console.log(result)
         sessionCookie = result.SessionCookie;
         let balance = result.Doge.Balance;
         balance /= 100000000;
