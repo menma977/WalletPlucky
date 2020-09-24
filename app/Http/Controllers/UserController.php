@@ -122,8 +122,8 @@ class UserController extends Controller
         $item->email = "Network Fee";
         $item->lot = "Network";
       } else {
-        $item->email = User::find($item->user_id)->email;
-        $item->lot = User::find($item->user_id)->lot;
+        $item->email = User::find($item->from_user)->email;
+        $item->lot = User::find($item->from_user)->lot;
       }
 
       $item->date = Carbon::parse($item->created_at)->format('d-M-Y H:i:s');
