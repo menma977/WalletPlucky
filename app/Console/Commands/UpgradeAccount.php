@@ -122,7 +122,7 @@ class UpgradeAccount extends Command
               $lot->type = 1;
               $lot->save();
             }
-          } else {
+          } else if(str_contains($response->body(), 'InsufficientFunds') == true) {
             $data->created_at = Carbon::parse($data->created_at)->addDay()->format('Y-m-d H:i:s');
             $data->save();
           }
