@@ -27,7 +27,7 @@ class LoginController extends Controller
     try {
       if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
         foreach (Auth::user()->tokens as $key => $value) {
-          $value->revoke();
+          $value->delete();
         }
         $user = Auth::user();
         if ($user) {
