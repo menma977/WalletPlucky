@@ -47,7 +47,8 @@ class UpgradeAccount extends Command
   public function handle()
   {
     try {
-      $data = Queue::where('status', 0)->whereDate('created_at', '<=', Carbon::now())->orderBy('id', 'asc')->get()->first();
+      sleep(10);
+      $data = Queue::where('status', 0)->whereDate('created_at', '<=', Carbon::now())->whereTime('created_at', '<=', Carbon::now()->format('H:i:s'))->orderBy('id', 'asc')->get()->first();
       if ($data) {
         $user = User::find($data->user_id);
         if ($data->type == 2) {
@@ -66,7 +67,7 @@ class UpgradeAccount extends Command
           'Totp' => ''
         ]);
 
-        if ($responseGetSession->successful() && str_contains($responseGetSession->body(), 'InvalidApiKey') == false && str_contains($responseGetSession->body(), 'LoginInvalid') == false) {
+        if ($responseGetSession->successful() && str_contains($responseGetSession->body(), 'SessionCookie') == true) {
           $dataGetSession = $responseGetSession->json();
           if ($data->type == 0) {
             $response = Http::asForm()->post('https://www.999doge.com/api/web.aspx', [
@@ -87,8 +88,6 @@ class UpgradeAccount extends Command
               'Currency' => 'doge',
             ]);
           }
-
-          Log::info($response->body());
 
           if ($response->successful() && str_contains($response->body(), 'Pending') == true) {
             $data->status = 1;
@@ -122,10 +121,17 @@ class UpgradeAccount extends Command
               $lot->type = 1;
               $lot->save();
             }
-          } else if(str_contains($response->body(), 'InsufficientFunds') == true) {
-            $data->created_at = Carbon::parse($data->created_at)->addDay()->format('Y-m-d H:i:s');
+            Log::info($response->body() . ' - to:' . $sendTo->username ?: 'IT/Admin Wallet' . ' - from:' . $user->username);
+          } else if (str_contains($response->body(), 'InsufficientFunds') == true) {
+            $data->created_at = Carbon::now()->addMinutes(5)->format('Y-m-d H:i:s');
             $data->save();
+          } else {
+            $data->created_at = Carbon::now()->addMinutes(1)->format('Y-m-d H:i:s');
+            $data->save();
+            Log::info($response->body());
           }
+        } else {
+          Log::info($responseGetSession->body());
         }
       }
     } catch (Exception $e) {
