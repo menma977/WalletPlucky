@@ -122,8 +122,10 @@
       const arrayData = [];
 
       @foreach($lot as $id => $item)
+      @if($id != 0)
       arrayLabel.push("{{$id}}")
       arrayData.push("{{$item}}")
+      @endif
       @endforeach
 
       const areaChartData = {
