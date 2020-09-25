@@ -208,21 +208,21 @@ class LotController extends Controller
             foreach ($binary['list'] as $id => $item) {
               $getDataUser = User::where('username', $item['username'])->first();
 
-              if ($levelIndex > 7 || $getDataUser->role === 1) {
+              if ($levelIndex <= 7 && $getDataUser) {
+                $totalLot = Lot::where('user_id', $getDataUser->id)->sum('debit') - Lot::where('user_id', $getDataUser->id)->sum('credit');
+                if ($totalLot > 0 && $getDataUser->lot > 0 && $getDataUser->lot >= $nextLot->id) {
+                  //for USER
+                  $queue = new Queue();
+                  $queue->user_id = Auth::user()->id;
+                  $queue->send_to = $getDataUser->id;
+                  $queue->value = $nextLot->price * $level->find($levelIndex)->percent / 100;
+                  $queue->type = 1;
+                  $queue->save();
+                  $totalValue -= $queue->value;
+                  $levelIndex++;
+                }
+              } else {
                 break;
-              }
-
-              $totalLot = Lot::where('user_id', $getDataUser->id)->sum('debit') - Lot::where('user_id', $getDataUser->id)->sum('credit');
-              if ($totalLot > 0 && $getDataUser->lot > 0 && $getDataUser->lot >= $nextLot->id) {
-                //for USER
-                $queue = new Queue();
-                $queue->user_id = Auth::user()->id;
-                $queue->send_to = $getDataUser->id;
-                $queue->value = $nextLot->price * $level->find($levelIndex)->percent / 100;
-                $queue->type = 1;
-                $queue->save();
-                $totalValue -= $queue->value;
-                $levelIndex++;
               }
             }
             $queue->save();
