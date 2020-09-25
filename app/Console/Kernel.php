@@ -24,18 +24,18 @@ class Kernel extends ConsoleKernel
    */
   protected function schedule(Schedule $schedule)
   {
-    $schedule->command('dollarGrabber')->hourly();
-    $schedule->command('DeleteUpgradeAccountIfDone')->daily();
+    $schedule->command('dollarGrabber')->hourly()->withoutOverlapping();
+    $schedule->command('DeleteUpgradeAccountIfDone')->daily()->withoutOverlapping();
 
-    $schedule->command('UpgradeAccount')->everyTwoMinutes();
-    $schedule->command('UpgradeAccount')->everyTwoMinutes();
-    $schedule->command('UpgradeAccount')->everyTwoMinutes();
-    $schedule->command('UpgradeAccount')->everyTwoMinutes();
-    $schedule->command('UpgradeAccount')->everyTwoMinutes();
-    $schedule->command('UpgradeAccount')->everyTwoMinutes();
-    $schedule->command('UpgradeAccount')->everyTwoMinutes();
-    $schedule->command('UpgradeAccount')->everyTwoMinutes();
-    $schedule->command('UpgradeAccount')->everyTwoMinutes();
+    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
   }
 
   /**
