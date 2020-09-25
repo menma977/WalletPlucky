@@ -442,7 +442,7 @@
           let description = ""
           let balance = ""
           if (debit == 0) {
-            description = data[i].email + " Send: " + credit / 100000000 + " DOGE. Upgrade Lot " + level;
+            description = data[i].email + " Recived: " + credit / 100000000 + " DOGE. Upgrade Lot " + level;
             balance = "-" + credit / 100000000 + " DOGE"
           } else {
             description = data[i].email + " Send: " + debit / 100000000 + " DOGE. Upgrade Lot " + level;

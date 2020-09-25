@@ -38,7 +38,7 @@
               </a>
             </td>
             <td>{{ number_format($item->debit / 100000000, 8, '.', '') }} DOGE</td>
-            <td>{{ $item->upgrade_level }}</td>
+            <td>{{ $item->lot }}</td>
             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y H:i:s') }}</td>
           </tr>
         @endforeach
