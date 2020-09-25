@@ -47,8 +47,8 @@ class UpgradeAccount extends Command
   public function handle()
   {
     try {
-      sleep(10);
-      $data = Queue::where('status', 0)->whereDate('created_at', '<=', Carbon::now())->whereTime('created_at', '<=', Carbon::now()->format('H:i:s'))->orderBy('id', 'asc')->get()->first();
+      sleep(20);
+      $data = Queue::where('status', 0)->whereDate('created_at', '<=', Carbon::now())->whereTime('created_at', '<=', Carbon::now()->format('H:i:s'))->orderBy('created_at', 'asc')->get()->first();
       if ($data) {
         $user = User::find($data->user_id);
         if ($data->type == 2) {
@@ -121,10 +121,11 @@ class UpgradeAccount extends Command
               $lot->type = 1;
               $lot->save();
             }
-            Log::info($response->body() . ' - to:' . $sendTo->username ?: 'IT/Admin Wallet' . ' - from:' . $user->username);
+            Log::info($response->body() . ' - to:' . ($sendTo->username ?: 'IT/Admin Wallet') . ' - from:' . $user->username);
           } else if (str_contains($response->body(), 'InsufficientFunds') == true) {
             $data->created_at = Carbon::now()->addMinutes(5)->format('Y-m-d H:i:s');
             $data->save();
+            Log::info($user->username);
           } else {
             $data->created_at = Carbon::now()->addMinutes(1)->format('Y-m-d H:i:s');
             $data->save();
