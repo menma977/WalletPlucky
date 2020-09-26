@@ -24,7 +24,7 @@ class UserController extends Controller
     $user = Auth::user();
     if ($user) {
       $setting = Setting::find(1);
-      $onQueue = Queue::where('user_id', Auth::user()->id)->where('status', false)->count() ? true : false;
+      $onQueue = Queue::where('user_id', Auth::user()->id)->where('status', 0)->count() ? true : false;
       $dollar = $setting->dollar;
       $lotTarget = Lot::where('user_id', $user->id)->sum('debit');
       $lotProgress = Lot::where('user_id', $user->id)->sum('credit');
