@@ -102,7 +102,7 @@ class UpgradeAccount extends Command
               $lot->lot = 0;
               $lot->type = 0;
               $lot->save();
-            } else if ($data->send_to == 2) {
+            } else if ($data->type == 2) {
               $lot = new Lot();
               $lot->user_id = $sendTo->id;
               $lot->from_user = $user->id;
