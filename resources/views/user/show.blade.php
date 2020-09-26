@@ -99,80 +99,144 @@
       <div class="col-md-7">
         <div class="card">
           <div class="card-header p-2">
-            <h3 class="card-title">Data User</h3>
+            <ul class="nav nav-pills">
+              <li class="nav-item">
+                <a class="nav-link active" href="#activity" data-toggle="tab">Activity</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a>
+              </li>
+            </ul>
           </div>
           <div class="card-body">
             <div class="tab-content">
-              <div class="active tab-pane" id="activity">
-                <div class="post table-responsive">
-                  <h5>Deposits External</h5>
-                  <a id="loadDeposit" class="btn btn-app">
-                    <i class="fas fa-redo"></i> Refresh
-                  </a>
-                  <table id="tableDepositExternal" class="table table-striped text-center" style="width: 100%">
-                    <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th style="width: 20px">Currency</th>
-                      <th>Value</th>
-                      <th>Address</th>
-                      <th>Hash</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
+              <div class="tab-pane active" id="activity">
+                <div class="post">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="user-block">
+                        <span class="username">Deposits</span>
+                        <span class="description">External</span>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <button type="button" class="btn btn-block btn-primary btn-sm" id="loadDeposit">
+                        <i class="fas fa-redo"></i> Refresh
+                      </button>
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <table id="tableDepositExternal" class="table table-striped text-center" style="width: 100%">
+                      <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th style="width: 20px">Currency</th>
+                        <th>Value</th>
+                        <th>Address</th>
+                        <th>Hash</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                  <hr/>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="user-block">
+                        <span class="username">Deposits</span>
+                        <span class="description">Incoming</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <table id="tableDepositInternal" class="table table-striped text-center" style="width: 100%">
+                      <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th style="width: 20px">Currency</th>
+                        <th>Value</th>
+                        <th>Address</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-                <div class="post table-responsive">
-                  <h5>Incoming</h5>
-                  <table id="tableDepositInternal" class="table table-striped text-center" style="width: 100%">
-                    <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th style="width: 20px">Currency</th>
-                      <th>Value</th>
-                      <th>Address</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
+                <div class="post">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="user-block">
+                        <span class="username">Withdrawals</span>
+                        <span class="description">External</span>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <button type="button" class="btn btn-block btn-primary btn-sm" id="loadWithdraw">
+                        <i class="fas fa-redo"></i> Refresh
+                      </button>
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <table id="tableWithdrawExternal" class="table table-striped text-center" style="width: 100%">
+                      <thead>
+                      <tr>
+                        <th>Completed</th>
+                        <th>Requested</th>
+                        <th style="width: 20px">Currency</th>
+                        <th>Value</th>
+                        <th>Address</th>
+                        <th>Hash</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                  <hr/>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="user-block">
+                        <span class="username">Withdrawals</span>
+                        <span class="description">Outgoing</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <table id="tableWithdrawInternal" class="table table-striped text-center" style="width: 100%">
+                      <thead>
+                      <tr>
+                        <th>Completed</th>
+                        <th>Requested</th>
+                        <th style="width: 20px">Currency</th>
+                        <th>Value</th>
+                        <th>Address</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-                <div class="post table-responsive">
-                  <h5>Withdrawals External</h5>
-                  <a id="loadWithdraw" class="btn btn-app">
-                    <i class="fas fa-redo"></i> Refresh
-                  </a>
-                  <table id="tableWithdrawExternal" class="table table-striped text-center" style="width: 100%">
-                    <thead>
-                    <tr>
-                      <th>Completed</th>
-                      <th>Requested</th>
-                      <th style="width: 20px">Currency</th>
-                      <th>Value</th>
-                      <th>Address</th>
-                      <th>Hash</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="post table-responsive">
-                  <h5>Outgoing</h5>
-                  <table id="tableWithdrawInternal" class="table table-striped text-center" style="width: 100%">
-                    <thead>
-                    <tr>
-                      <th>Completed</th>
-                      <th>Requested</th>
-                      <th style="width: 20px">Currency</th>
-                      <th>Value</th>
-                      <th>Address</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
+              </div>
+              <div class="tab-pane" id="timeline">
+                <div class="timeline timeline-inverse">
+                  @foreach($logBalance as $item)
+                    <div class="time-label">
+                      <label class="btn btn-primary btn-xs">10 Feb. 2014</label>
+                    </div>
+                    @foreach($item as $subItem)
+                      <div>
+                        <i class="fas fa-paper-plane bg-primary"></i>
+                        <div class="timeline-item">
+                          <h3 class="timeline-header border-0">
+                            <b>{{ $user->username }}</b> Send <b>{{ number_format($subItem->balance / 100000000, 8, '.', '') }} Doge</b> To <b>{{ $subItem->wallet }}</b>
+                          </h3>
+                        </div>
+                      </div>
+                    @endforeach
+                  @endforeach
                 </div>
               </div>
             </div>
@@ -198,9 +262,9 @@
   <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
   <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
 
-    <!-- Toastr -->
+  <!-- Toastr -->
   <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
-  
+
   <script>
     let sessionCookie = ""
     let tableDepositExternal = $('#tableDepositExternal').DataTable({
@@ -288,7 +352,7 @@
 
       const url = "https://corsdoge.herokuapp.com/doge";
       fetch(url, requestOptions).then(response => response.json()).then(result => {
-          console.log(result)
+        console.log(result)
         sessionCookie = result.SessionCookie;
         let balance = result.Doge.Balance;
         balance /= 100000000;
