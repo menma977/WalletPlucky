@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\LogBalance;
 use App\Model\Lot;
-use App\Model\LotList;
 use App\Model\Queue;
 use App\User;
 use Carbon\Carbon;
@@ -11,7 +11,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -96,6 +95,9 @@ class UserController extends Controller
   {
     $user = User::find($id);
     $onQueue = Queue::where('user_id', $user->id)->where('status', 0)->count();
+    $logBalance = LogBalance::where('user_id', $user->id)->take(100)->get()->groupBy(function ($item) {
+      return Carbon::parse($item->created_at)->format('d-m-Y');
+    });
 
     $sponsorLine = $user->email;
 
@@ -104,7 +106,8 @@ class UserController extends Controller
       'gradeTarget' => Lot::where('user_id', $id)->sum("debit"),
       'progressGrade' => Lot::where('user_id', $id)->sum("credit"),
       'onQueue' => $onQueue,
-      'sponsorLine' => $sponsorLine
+      'sponsorLine' => $sponsorLine,
+      'logBalance' => $logBalance
     ];
 
     return view('user.show', $data);
