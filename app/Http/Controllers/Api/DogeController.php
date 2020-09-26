@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Model\LogBalance;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -55,6 +56,11 @@ class DogeController extends Controller
           ];
           return response()->json($data, 500);
         } else {
+          $logBalance = new LogBalance();
+          $logBalance->user_id = Auth::id();
+          $logBalance->wallet = $request->wallet;
+          $logBalance->balance = $request->amount;
+          $logBalance->save();
           $data = [
             'message' => $response->json(),
           ];
