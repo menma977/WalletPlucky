@@ -155,7 +155,7 @@ class LotController extends Controller
       'secondary_password' => 'required|numeric'
     ]);
 
-    if (Queue::where('user_id', Auth::user()->id)->where('status', false)->count()) {
+    if (Queue::where('user_id', Auth::user()->id)->where('status', 0)->count()) {
       $data = [
         'message' => 'LOT in process'
       ];
