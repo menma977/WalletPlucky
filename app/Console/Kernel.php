@@ -29,33 +29,33 @@ class Kernel extends ConsoleKernel
 
     $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
     $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
-    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
+//    $schedule->command('UpgradeAccount')->everyMinute()->withoutOverlapping();
   }
 
   /**
