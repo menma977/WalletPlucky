@@ -53,6 +53,7 @@ Route::middleware('auth')->group(static function () {
     Route::get('/delete/session/{id}', 'UserController@logoutSession')->name('logoutSession');
     Route::post('/find', 'UserController@find')->name('find');
     Route::get('/delete/bot/{id}', 'UserController@deleteBot')->name('deleteBot');
+    Route::get('/filter/{data?}', 'UserController@filter')->name('filter');
   });
 
   Route::group(['prefix' => 'lot', 'as' => 'lot.'], static function () {
@@ -77,6 +78,7 @@ Route::middleware('auth')->group(static function () {
     Route::get('/shot/down/{status}', 'SettingController@shotDown')->name('shotDown');
     Route::post('/edit/lot', 'SettingController@editLot')->name('editLot');
     Route::post('/save/wallet', 'SettingController@saveWallet')->name('saveWallet');
+    Route::post('/edit/limit', 'SettingController@editLimitPlay')->name('editLimitPlay');
     Route::post('/edit/wallet/{id}', 'SettingController@editWallet')->name('editWallet');
     Route::get('/delete/wallet/{id}', 'SettingController@deleteWallet')->name('deleteWallet');
   });

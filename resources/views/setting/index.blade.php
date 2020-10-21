@@ -86,6 +86,24 @@
           </form>
         </div>
       </div>
+      <div class="col-md-6">
+        <div class="card card-outline card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Limit Play</h3>
+          </div>
+          <form method="post" action="{{ route('setting.editLimitPlay') }}">
+            @csrf
+            <div class="card-body">
+              <div class="input-group">
+                <input type="text" class="form-control @error('limit_play') is-invalid @enderror" id="limit_play" name="limit_play" value="{{ old('limit_play') ?: $setting->limit_play }}">
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-block btn-success">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
       <div class="col-md-12">
         <div class="card card-outline card-primary">
           <div class="card-header">

@@ -33,28 +33,49 @@
       <h3 class="card-title">List Transaction</h3>
     </div>
     <div class="card-body p-0 table-responsive">
-      <div class="mb-2 mt-2 text-center">
-        {{ $users->links() }}
+      <div class="form-group col-12">
+        <label for="search-user">Search: </label>
+        <input type="text" id="search-user" class="form-control" onkeyup="refreshTable()"/>
       </div>
       <table class="table table-sm" id="data" style="width: 100%">
         <thead class="text-center">
         <tr>
-          <th style="width: 20px">#</th>
           <th>Detail</th>
           <th>Username</th>
           <th>Email</th>
           <th>Phone</th>
-          <th>Password</th>
           <th>Wallet</th>
           <th>LOT</th>
-          <th style="width: 100px">Suspend</th>
           <th style="width: 150px">Status</th>
-          <th>Username DOGE</th>
-          <th>Password DOGE</th>
           <th>Date</th>
           <th>Delete Treding</th>
         </tr>
         </thead>
+        <template id="template-user-row">
+          <tr>
+            <td>
+              <a class="detail" href="{{ route('user.show','##id##') }}">
+                <button type="button" class="btn btn-block btn-default btn-xs">Detail</button>
+              </a>
+            </td>
+            <td class="username"></td>
+            <td class="email"></td>
+            <td class="phone"></td>
+            <td class="wallet"></td>
+            <td class="lot"></td>
+            <td>
+              <a class="status" href="{{ route('user.activate','##id##') }}">
+                <button type="button" class="btn btn-block btn-info btn-xs status_view"></button>
+              </a>
+            </td>
+            <td class="date"></td>
+            <td>
+              <a class="delete_treding" href="{{ route('user.logoutSession','##id##') }}">
+                <button type="button" class="btn btn-block btn-danger btn-xs">Delete Treding</button>
+              </a>
+            </td>
+          </tr>
+        </template>
       </table>
     </div>
   </div>
@@ -80,6 +101,9 @@
   <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
 
   <script>
+    const table = document.querySelector("#data")
+    const row = document.querySelector('#template-user-row').content.querySelector("tr");
+
     $(function () {
       @error("error")
       toastr.error("{{ $message }}");
@@ -88,48 +112,69 @@
       toastr.error("{{ $message }}");
       @enderror
 
-      const array = [];
-
-      @foreach($users as $id => $item)
-      array.push([
-        "{{ $item->id }}.",
-        '<a href="{{ route('user.show', $item->id) }}"><button type="button" class="btn btn-block btn-success btn-xs">Detail</button></a>',
-        '{{ $item->username }}',
-        '{{ $item->email }}',
-        '{{ $item->phone }}',
-        '{{ $item->password_junk }}',
-        '{{ $item->wallet }}',
-        '{{ $item->lot }}',
-        @if($item->suspend === 0)
-          '<a href="{{ route('user.suspend', [$item->id, 1]) }}"><button type="button" class="btn btn-block btn-danger btn-xs">Suspend</button></a>',
-        @else
-          '<a href="{{ route('user.suspend', [$item->id, 0]) }}"><button type="button" class="btn btn-block btn-success btn-xs">UnSuspend</button></a>',
-        @endif
-            @if($item->status === 0)
-          '<a href="{{ route('user.activate', $item->id) }}"><button type="button" class="btn btn-block btn-success btn-xs">Wait Confirmation. Activate Now</button></a>',
-        @elseif($item->status === 2)
-          'Active',
-        @else
-          'Process Registration',
-        @endif
-          '{{ $item->doge_username }}',
-        '{{ $item->doge_password }}',
-        '{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y H:i:s') }}',
-        '<a href="{{ route('user.logoutSession', $item->id) }}"><button type="button" class="btn btn-block btn-danger btn-xs">Delete Treding Today</button></a>',
-      ],);
-      @endforeach
+      refreshTable(null);
 
       $('#data').DataTable({
         "paging": false,
         "lengthChange": true,
-        "searching": true,
+        "searching": false,
         "ordering": true,
         "info": true,
         "autoWidth": true,
         "responsive": true,
-        "data": array
       });
-    })
-    ;
+
+    });
+
+    async function refreshTable(e) {
+      if (e) {
+        e.preventDefault();
+      }
+      const filter = document.getElementById('search-user').value;
+      if (filter.length < 1 || filter.length > 3) {
+        const response = await fetch("{{ route('user.filter', '##filter##') }}".replace("##filter##", filter), {
+          method: 'GET',
+          headers: {
+            Accept: "application/json",
+            "X-CSRF-TOKEN": $("input[name='_token']").val()
+          }
+        });
+
+        if (response && response.ok) {
+          const users = await response.json();
+          const old_tbody = table.querySelector("tbody");
+          const new_tbody = document.createElement('tbody');
+
+          for (const user of users) {
+            // console.log(user)
+            const newRow = row.cloneNode(true);
+            newRow.querySelector(".detail").href = newRow.querySelector(".detail").href.replace("##id##", user.id)
+            newRow.querySelector(".username").innerText = user.username;
+            newRow.querySelector(".email").innerText = user.email;
+            newRow.querySelector(".phone").innerText = user.phone;
+            newRow.querySelector(".wallet").innerText = user.wallet;
+            newRow.querySelector(".lot").innerText = user.lot;
+            if (user.status == 0) {
+              newRow.querySelector(".status_view").innerText = 'Wait Confirmation. Activate Now';
+              newRow.querySelector(".status").href = newRow.querySelector(".status").href.replace("##id##", user.id)
+            } else if (user.status == 2) {
+              newRow.querySelector(".status_view").innerText = 'Active';
+              newRow.querySelector(".status").href = newRow.querySelector(".status").href.replace("##id##", user.id)
+            } else {
+              newRow.querySelector(".status_view").innerText = 'Process Registration';
+              newRow.querySelector(".status").href = newRow.querySelector(".status").href.replace("##id##", user.id)
+            }
+            newRow.querySelector(".date").innerText = user.date;
+            newRow.querySelector(".delete_treding").href = newRow.querySelector(".delete_treding").href.replace("##id##", user.id)
+            new_tbody.appendChild(newRow);
+          }
+          if (old_tbody) {
+            old_tbody.parentNode.replaceChild(new_tbody, old_tbody)
+          } else {
+            table.appendChild(new_tbody)
+          }
+        }
+      }
+    }
   </script>
 @endsection

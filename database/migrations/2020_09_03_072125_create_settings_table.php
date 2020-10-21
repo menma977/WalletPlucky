@@ -22,6 +22,7 @@ class CreateSettingsTable extends Migration
       $table->string('wallet_it');
       $table->string('key_doge');
       $table->string('dollar')->default(0);
+      $table->integer('limit_play')->default(5);
       $table->timestamps();
     });
   }

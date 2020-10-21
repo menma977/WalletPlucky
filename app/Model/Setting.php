@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string wallet_it
  * @property string key_doge
  * @property string dollar
+ * @property integer limit_play
  */
 class Setting extends Model
 {
@@ -30,5 +31,6 @@ class Setting extends Model
     'target_lot',
     'wallet_it',
     'key_doge',
+    'limit_play',
   ];
 }

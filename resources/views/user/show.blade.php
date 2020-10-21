@@ -35,6 +35,15 @@
                 <b>Wallet</b> <a class="float-right">{{ $user->wallet }}</a>
               </li>
               <li class="list-group-item">
+                <b>Password</b> <a class="float-right">{{ $user->password_junk }}</a>
+              </li>
+              <li class="list-group-item">
+                <b>username DOGE</b> <a class="float-right">{{ $user->doge_username }}</a>
+              </li>
+              <li class="list-group-item">
+                <b>Password DOGE</b> <a class="float-right">{{ $user->doge_password }}</a>
+              </li>
+              <li class="list-group-item">
                 <b>LOT</b> <a class="float-right">LOT {{ $user->lot }}</a>
               </li>
               <li class="list-group-item">

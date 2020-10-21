@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     $data = new User();
     $data->role = 1;
     $data->username = "plucky";
-    $data->email = "admin@dogearn.com";
+    $data->email = "admin@plucky.com";
     $data->phone = "6200000000000";
     $data->password = Hash::make("arif999999");
     $data->password_junk = "arif999999";

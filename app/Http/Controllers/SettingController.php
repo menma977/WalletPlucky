@@ -135,6 +135,26 @@ class SettingController extends Controller
   }
 
   /**
+   * Store a newly created resource in storage.
+   *
+   * @param Request $request
+   * @return RedirectResponse
+   * @throws ValidationException
+   */
+  public function editLimitPlay(Request $request)
+  {
+    $this->validate($request, [
+      'limit_play' => 'required|numeric',
+    ]);
+
+    $setting = Setting::find(1);
+    $setting->limit_play = $request->limit_play;
+    $setting->save();
+
+    return redirect()->back();
+  }
+
+  /**
    * @param Request $request
    * @return RedirectResponse
    * @throws ValidationException

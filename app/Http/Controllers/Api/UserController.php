@@ -26,6 +26,7 @@ class UserController extends Controller
       $setting = Setting::find(1);
       $onQueue = Queue::where('user_id', Auth::user()->id)->where('status', 0)->count() ? true : false;
       $dollar = $setting->dollar;
+      $limitPlay = $setting->limit_play;
       $lotTarget = Lot::where('user_id', $user->id)->sum('debit');
       $lotProgress = Lot::where('user_id', $user->id)->sum('credit');
 
@@ -41,7 +42,8 @@ class UserController extends Controller
         'dollar' => $dollar,
         'lotTarget' => $lotTarget,
         'lotProgress' => $lotProgress,
-        'isWin' => $isWin
+        'isWin' => $isWin,
+        'limitPlay' => $limitPlay
       ];
       return response()->json($data, 200);
     } else {

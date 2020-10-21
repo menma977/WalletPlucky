@@ -9,6 +9,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -29,6 +30,27 @@ class UserController extends Controller
     ];
 
     return view('user.index', $data);
+  }
+
+  /**
+   * @param string $filter
+   * @return JsonResponse
+   */
+  public function filter($filter = "")
+  {
+    if ($filter) {
+      $users = User::where('username', 'like', "%" . $filter . "%")
+        ->orWhere('email', 'like', "%" . $filter . "%")
+        ->orWhere('wallet', 'like', "%" . $filter . "%")
+        ->get();
+    } else {
+      $users = User::take(10)->get();
+    }
+
+    $users->map(function ($item) {
+      $item->date = Carbon::parse($item->created_at)->format('d-M-Y H:i:s');
+    });
+    return response()->json($users, 200);
   }
 
   /**
@@ -145,6 +167,6 @@ class UserController extends Controller
     $user->date_trade = null;
     $user->save();
 
-    return redirect('user/show/'.$id);
+    return redirect('user/show/' . $id);
   }
 }
